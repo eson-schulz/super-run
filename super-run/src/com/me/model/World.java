@@ -21,10 +21,22 @@ public class World {
 		if(stage == Stage.GOING){
 			player.update(delta);
 			checkCollisions(delta);
+			updatePlatforms(delta);
 		}
 	}
 	
-	public void updatePlatforms(float delta){
+	private void updatePlatforms(float delta){
+		//so we won't get an exception when removing platforms
+		ArrayList<Platform> allPlatforms = new ArrayList<Platform>(platforms);
+		for(Platform p : allPlatforms){
+			if(p.bounds.x + p.bounds.width < (player.bounds.x - WORLD_WIDTH / 2.1)){
+				platforms.remove(p);
+				createPlatform(allPlatforms.get(allPlatforms.size() - 1));
+			}
+		}
+	}
+	
+	private void createPlatform(Platform previousPlat){
 		
 	}
 	
@@ -68,12 +80,9 @@ public class World {
 	public World(){
 		player = new Player(this, 1, 15);
 		platforms = new ArrayList<Platform>();
-		for(int i = 0; i < 40; i++){
-			if(i < 6){
+		for(int i = 0; i < 4; i++){
+			if(i < 12){
 				platforms.add(new Platform(1 + i * 9));
-			}
-			else if(i >= 6 && i < 8){
-				platforms.add(new Platform(1 + i * 10));
 			}
 			else if(i >= 8 && i <= 12){
 				platforms.add(new Platform(1 + i * 11));

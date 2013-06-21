@@ -17,7 +17,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+		Gdx.gl.glClearColor(0.1f, 0.1f, 0.6f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		updateJump();
@@ -66,6 +66,11 @@ public class GameScreen implements Screen {
 			}
 			else if(world.player.state == State.JUMPING){
 				world.player.continueJumping();
+			}
+		}
+		else{
+			if(world.player.state == State.JUMPING){
+				world.player.stopJumping();
 			}
 		}
 	}

@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Player {
 	public final float GRAVITY = -20f;
 	public final float JUMP_VELOCITY = 6f;
-	public final float MAX_JUMP_TIME = 0.3f;
+	public final float MAX_JUMP_TIME = 0.2f;
 	public final float MAX_VELOCITY_X = 20f;
 	public final float MAX_VELOCITY_Y = 10f;
 	
@@ -27,6 +27,10 @@ public class Player {
 		state = State.JUMPING;
 		stateTime = 0f;
 		velocity.y = JUMP_VELOCITY; 
+	}
+	
+	public void stopJumping(){
+		state = State.FALLING;
 	}
 	
 	public void hitSide(float newX){
@@ -55,10 +59,6 @@ public class Player {
 	}
 	
 	public void update(float delta){
-//		if(state == State.RUNNING){
-//			acceleration.y = 0f;
-//		}
-		
 		velocity.add(acceleration.mul(delta));
 		acceleration.mul(1 / delta);
 		
@@ -86,7 +86,7 @@ public class Player {
 		
 		stateTime += delta;
 		System.out.println(state);
-		System.out.println(bounds.y);
+		System.out.println(velocity.y);
 	}
 
 	public Player(World w, float xStart, float yStart){
