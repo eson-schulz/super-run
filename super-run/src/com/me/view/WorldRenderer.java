@@ -25,11 +25,13 @@ public class WorldRenderer{
 	private OrthographicCamera cam;
 	
 	public void render(){
-		batch.begin();
-		batch.draw(playerTexture, world.player.bounds.x * ppuX, world.player.bounds.y * ppuY,  world.player.bounds.width * ppuX, world.player.bounds.height * ppuY);
-		for(Platform p : world.platforms){
+		batch.begin();for(Platform p : world.platforms){
 			batch.draw(buildingTexture, p.bounds.x * ppuX, p.bounds.y * ppuY, p.bounds.width * ppuX, p.bounds.height * ppuY);
 		}
+		cam.position.set((world.player.bounds.x + World.WORLD_WIDTH / 3) * ppuX, World.WORLD_HEIGHT / 2 * ppuY, 0);
+		cam.update();
+		batch.setProjectionMatrix(cam.combined);
+		batch.draw(playerTexture, world.player.bounds.x * ppuX, world.player.bounds.y * ppuY,  world.player.bounds.width * ppuX, world.player.bounds.height * ppuY);
 		batch.end();
 	}
 	

@@ -19,8 +19,8 @@ public class World {
 	
 	public void update(float delta){
 		if(stage == Stage.GOING){
-			checkCollisions(delta);
 			player.update(delta);
+			checkCollisions(delta);
 		}
 	}
 	
@@ -29,28 +29,29 @@ public class World {
 	}
 	
 	private void checkCollisions(float delta){
-		//float newX = player.bounds.x + player.velocity.x * delta;
-		Rectangle newBounds; // = new Rectangle(newX, player.bounds.y, player.bounds.width, player.bounds.height);
-//		if(player.state != State.RUNNING){	
-//			for(int i = 0; i < platforms.size(); i++){
-//				if(inBounds(newBounds, platforms.get(i).bounds)){
-//					player.hitSide(platforms.get(i).bounds.x - player.bounds.width - 0.01f);
-//					break;
-//				}
-//			}
-//		}
+		Rectangle newBounds;
 		
 		float newY = player.bounds.y + player.velocity.y * delta;
 		newBounds = new Rectangle(player.bounds.x, newY, player.bounds.width, player.bounds.height);
+		
 		for(int i = 0; i < platforms.size(); i++){
 			if(inBounds(newBounds, platforms.get(i).bounds)){
-				player.hitTop(platforms.get(i).bounds.y + platforms.get(i).bounds.height + 0.01f);
+				player.hitTop(platforms.get(i).bounds.y + platforms.get(i).bounds.height + 0.001f);
 				break;
 			}
 			if(i == platforms.size() - 1){
 				if(player.state != State.JUMPING){
 					player.state = State.FALLING;
 				}
+			}
+		}
+		
+		float newX = player.bounds.x + player.velocity.x * delta;
+		newBounds = new Rectangle(newX, player.bounds.y, player.bounds.width, player.bounds.height);
+		for(int i = 0; i < platforms.size(); i++){
+			if(inBounds(newBounds, platforms.get(i).bounds)){
+				player.hitSide(platforms.get(i).bounds.x - player.bounds.width - 0.01f);
+				break;
 			}
 		}
 	}
@@ -65,10 +66,23 @@ public class World {
 	}
 	
 	public World(){
-		player = new Player(this, 1, 10);
+		player = new Player(this, 1, 15);
 		platforms = new ArrayList<Platform>();
-		platforms.add(new Platform(0));
-		platforms.add(new Platform(7));
+		for(int i = 0; i < 40; i++){
+			if(i < 6){
+				platforms.add(new Platform(1 + i * 9));
+			}
+			else if(i >= 6 && i < 8){
+				platforms.add(new Platform(1 + i * 10));
+			}
+			else if(i >= 8 && i <= 12){
+				platforms.add(new Platform(1 + i * 11));
+			}
+			else if(i > 12 && i < 15){
+				platforms.add(new Platform(1 + i * 12));
+			}
+			else platforms.add(new Platform(1 + i * 13));
+		}
 		
 		stage = Stage.GOING;
 	}

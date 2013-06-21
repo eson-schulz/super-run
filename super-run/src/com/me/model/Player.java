@@ -32,14 +32,17 @@ public class Player {
 	public void hitSide(float newX){
 		state = State.FALLING;
 		velocity.x = 0f;
+		if(velocity.y > 0){
+			velocity.y = 0f;
+		}
 		acceleration.x = 0f;
-		//bounds.x = newX;
+		bounds.x = newX;
 	}
 	
 	public void hitTop(float newY){
 		state = State.RUNNING;
 		velocity.y = 0f;
-		//bounds.y = newY;
+		bounds.y = newY;
 	}
 	
 	public void continueJumping(){
@@ -52,9 +55,9 @@ public class Player {
 	}
 	
 	public void update(float delta){
-		if(state == State.RUNNING){
-			acceleration.y = 0f;
-		}
+//		if(state == State.RUNNING){
+//			acceleration.y = 0f;
+//		}
 		
 		velocity.add(acceleration.mul(delta));
 		acceleration.mul(1 / delta);
@@ -83,6 +86,7 @@ public class Player {
 		
 		stateTime += delta;
 		System.out.println(state);
+		System.out.println(bounds.y);
 	}
 
 	public Player(World w, float xStart, float yStart){
