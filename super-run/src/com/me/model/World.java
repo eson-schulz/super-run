@@ -18,10 +18,19 @@ public class World {
 	}
 	
 	public void update(float delta){
+		System.out.println(delta);
+		if(delta > 0.1f){
+			delta = 0.1f;
+		}
 		if(stage == Stage.GOING){
-			player.update(delta);
-			checkCollisions(delta);
-			updatePlatforms(delta);
+			if(player.isDone()){
+				stage = Stage.DONE;
+			}
+			else{
+				player.update(delta);
+				checkCollisions(delta);
+				updatePlatforms(delta);
+			}
 		}
 	}
 	
@@ -37,7 +46,19 @@ public class World {
 	}
 	
 	private void createPlatform(Platform previousPlat){
-		
+		//Approximate time in seconds player can jump
+		float airTime = 0.88f;
+		//Adjusts the platform
+		float randomDif = (float) (Math.random() * 5f);
+		//Adjusts the height of the platform
+		float randomHeightDif = 0f;
+		if(randomDif > 2.5 && previousPlat.bounds.height < 10){
+			randomHeightDif = (float) (Math.random() * 1.5);
+		}
+		else if(previousPlat.bounds.height > 2.1){
+			randomHeightDif = (float) (Math.random() * -2);
+		}
+		platforms.add(new Platform(previousPlat.bounds.x + previousPlat.bounds.width + (player.velocity.x * airTime) - randomDif, previousPlat.bounds.height + randomHeightDif));
 	}
 	
 	private void checkCollisions(float delta){
@@ -80,17 +101,11 @@ public class World {
 	public World(){
 		player = new Player(this, 1, 15);
 		platforms = new ArrayList<Platform>();
-		for(int i = 0; i < 4; i++){
-			if(i < 12){
-				platforms.add(new Platform(1 + i * 9));
-			}
-			else if(i >= 8 && i <= 12){
-				platforms.add(new Platform(1 + i * 11));
-			}
-			else if(i > 12 && i < 15){
-				platforms.add(new Platform(1 + i * 12));
-			}
-			else platforms.add(new Platform(1 + i * 13));
+		Platform oldPlat = new Platform(1, 5);
+		platforms.add(oldPlat);
+		for(int i = 0; i < 5; i++){
+				createPlatform(oldPlat);
+				oldPlat = platforms.get(platforms.size() - 1);
 		}
 		
 		stage = Stage.GOING;

@@ -58,6 +58,13 @@ public class Player {
 		}
 	}
 	
+	public boolean isDone(){
+		if(bounds.y < bounds.height * -1){
+			return true;
+		}
+		else return false;
+	}
+	
 	public void update(float delta){
 		velocity.add(acceleration.mul(delta));
 		acceleration.mul(1 / delta);
@@ -86,7 +93,6 @@ public class Player {
 		
 		stateTime += delta;
 		System.out.println(state);
-		System.out.println(velocity.y);
 	}
 
 	public Player(World w, float xStart, float yStart){

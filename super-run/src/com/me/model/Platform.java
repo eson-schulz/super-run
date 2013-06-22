@@ -9,11 +9,11 @@ public class Platform {
 		return (float)Math.random();
 	}
 	
-	public Platform(float x){
+	public Platform(float x, float height){
 		bounds = new Rectangle();
 		bounds.x = x;
 		bounds.y = 0f;
-		bounds.width = (randomNumber() * 8) + 4;
-		bounds.height = (randomNumber() * 2) + 2;
+		bounds.width = (randomNumber() * 12) + 2;
+		bounds.height = height;
 	}
 }
