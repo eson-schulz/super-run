@@ -1,6 +1,7 @@
 package com.me.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,6 +18,8 @@ public class WorldRenderer{
 	private float ppuX;
 	private float ppuY;
 	
+	private float cameraX;
+	
 	private TextureRegion playerTexture;
 	private TextureRegion buildingTexture;
 	
@@ -25,15 +28,36 @@ public class WorldRenderer{
 	private OrthographicCamera cam;
 	
 	public void render(){
-		batch.begin();
-		for(Platform p : world.platforms){
-			batch.draw(buildingTexture, p.bounds.x * ppuX, p.bounds.y * ppuY, p.bounds.width * ppuX, p.bounds.height * ppuY);
-		}
-		cam.position.set((world.player.bounds.x + World.WORLD_WIDTH / 3) * ppuX, World.WORLD_HEIGHT / 2 * ppuY, 0);
+		cameraX = (world.player.bounds.x + World.WORLD_WIDTH / 3);
+		cam.position.set(cameraX * ppuX, World.WORLD_HEIGHT / 2 * ppuY, 0);
 		cam.update();
 		batch.setProjectionMatrix(cam.combined);
-		batch.draw(playerTexture, world.player.bounds.x * ppuX, world.player.bounds.y * ppuY,  world.player.bounds.width * ppuX, world.player.bounds.height * ppuY);
+		
+		batch.begin();
+		batch.enableBlending();
+		drawPlayer();
+		batch.disableBlending();
+		drawPlatforms();
 		batch.end();
+	}
+	
+	private void drawPlayer(){
+		batch.draw(playerTexture, world.player.bounds.x * ppuX, world.player.bounds.y * ppuY,  world.player.bounds.width * ppuX, world.player.bounds.height * ppuY);
+	}
+	
+	private void drawPlatforms(){
+		for(Platform p : world.platforms){
+			if(onScreen(p)){
+				batch.draw(buildingTexture, p.bounds.x * ppuX, p.bounds.y * ppuY, p.bounds.width * ppuX, p.bounds.height * ppuY);
+			}
+		}
+	}
+	
+	private boolean onScreen(Platform p){
+		if(p.bounds.x + p.bounds.width > cameraX - World.WORLD_WIDTH / 2 && p.bounds.x < cameraX + World.WORLD_WIDTH / 2){
+			return true;
+		}
+		else return false;
 	}
 	
 	public void resize(float x, float y){

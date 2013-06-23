@@ -1,6 +1,7 @@
 package com.me.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.me.arun.SuperRun;
@@ -19,10 +20,18 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.6f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		updateJump();
-		world.update(delta);
-		renderer.render();
+
+		if(world.stage == Stage.GOING){
+			updateJump();
+			world.update(delta);
+			renderer.render();
+		}
+		else if(world.stage == Stage.DONE){
+			renderer.render();
+			if(Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.ANY_KEY)){
+				world.reset();
+			}
+		}
 	}
 
 	@Override
@@ -58,7 +67,7 @@ public class GameScreen implements Screen {
 	}
 	
 	private void updateJump(){
-		if(Gdx.input.isTouched()){
+		if(Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.ANY_KEY)){
 			if(world.player.state == State.RUNNING){
 				world.player.jump();
 			}

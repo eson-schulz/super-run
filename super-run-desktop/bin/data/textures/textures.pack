@@ -5,7 +5,7 @@ filter: Nearest,Nearest
 repeat: none
 building
   rotate: false
-  xy: 1, 53
+  xy: 1, 43
   size: 800, 600
   orig: 800, 600
   offset: 0, 0
@@ -13,7 +13,7 @@ building
 player
   rotate: false
   xy: 1, 1
-  size: 20, 50
-  orig: 20, 50
+  size: 20, 40
+  orig: 20, 40
   offset: 0, 0
   index: -1
