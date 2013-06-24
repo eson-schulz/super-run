@@ -1,8 +1,11 @@
 package com.me.view;
 
+import java.text.DecimalFormat;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,6 +28,8 @@ public class WorldRenderer{
 	
 	private SpriteBatch batch;
 	
+	private BitmapFont font;
+	
 	private OrthographicCamera cam;
 	
 	public void render(){
@@ -36,6 +41,7 @@ public class WorldRenderer{
 		batch.begin();
 		batch.enableBlending();
 		drawPlayer();
+		drawScore();
 		batch.disableBlending();
 		drawPlatforms();
 		batch.end();
@@ -51,6 +57,14 @@ public class WorldRenderer{
 				batch.draw(buildingTexture, p.bounds.x * ppuX, p.bounds.y * ppuY, p.bounds.width * ppuX, p.bounds.height * ppuY);
 			}
 		}
+	}
+	
+	private void drawScore(){
+		float xLoc = (World.WORLD_WIDTH / 1.3f + world.player.bounds.x);
+		if(Float.parseFloat(world.score) > 100){
+			xLoc = (World.WORLD_WIDTH / 1.32f + world.player.bounds.x);
+		}
+		font.draw(batch, world.score, xLoc * ppuX, ppuY * World.WORLD_HEIGHT - font.getCapHeight());
 	}
 	
 	private boolean onScreen(Platform p){
@@ -86,5 +100,8 @@ public class WorldRenderer{
 		cam = new OrthographicCamera(width, height);
 		cam.update();
 		batch = new SpriteBatch();
+		font = new BitmapFont();
+		font.setScale(2f);
+		font.setUseIntegerPositions(false);
 	}
 }

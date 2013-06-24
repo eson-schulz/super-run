@@ -1,5 +1,6 @@
 package com.me.model;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Rectangle;
@@ -12,6 +13,7 @@ public class World {
 	public Player player;
 	public Stage stage;
 	public ArrayList<Platform> platforms;
+	public String score;
 	
 	public enum Stage{
 		PAUSED, GOING, DONE
@@ -29,6 +31,7 @@ public class World {
 			player.update(delta);
 			checkCollisions(delta);
 			updatePlatforms(delta);
+			updateScore(delta);
 		}
 	}
 	
@@ -68,6 +71,11 @@ public class World {
 			}
 		}
 		platforms.add(new Platform(previousPlat.bounds.x + previousPlat.bounds.width + randomDif, previousPlat.bounds.height + randomHeightDif));
+	}
+	
+	private void updateScore(float delta){
+		DecimalFormat df = new DecimalFormat("##.##");
+		score = df.format(player.bounds.x);
 	}
 	
 	private void checkCollisions(float delta){
@@ -116,6 +124,7 @@ public class World {
 				addPlatform(lastPlatform);
 		}
 		stage = Stage.GOING;
+		score = "0.00";
 	}
 	
 	public World(){
